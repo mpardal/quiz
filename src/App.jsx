@@ -7,6 +7,7 @@ import SignUp from "./Components/SignUp.jsx";
 import Login from "./Components/Login.jsx";
 import Welcome from "./Components/Welcome.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
+import ForgetPassword from "./Components/ForgetPassword.jsx";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/connexion" element={<Login />} />
                 <Route path="/accueil" element={<Welcome />} />
                 <Route path="/error" element={<ErrorPage />} />
+                <Route path="/mot-de-passe-oublie" element={<ForgetPassword />} />
             </Routes>
             <Footer />
         </div>

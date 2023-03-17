@@ -6,8 +6,6 @@ const Landing = () => {
     const refSignUpButton = useRef(null)
     const refLoginButton = useRef(null)
 
-    console.log(refLoginButton)
-
     return(
         <main className="flex justify-around h-full text-amber-100 bg-worldcup bg-red-600 bg-no-repeat bg-center">
             <div className="my-auto">

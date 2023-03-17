@@ -1,11 +1,12 @@
 import club from '../assets/club.png'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from "../config/firebase-config.js";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebase-config.js";
 
 const SignUp = () => {
 
+    const navigate = useNavigate()
 
     const data = {
         pseudo:'',
@@ -30,10 +31,10 @@ const SignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const {email, password} = loginData
-            signInWithEmailAndPassword(auth, email, password)
+        const { email, password } = loginData
+        createUserWithEmailAndPassword(auth, email, password)
             .then(user => {
-                setLoginData({...data})
+                navigate('/accueil')
             })
             .catch(error => {
                 setError(error)
@@ -77,16 +78,21 @@ return(
                     </button>
                     :
                     <button disabled
-                            className="mx-auto px-5 py-1 text-white bg-red-600 rounded">
+                            className="mx-auto px-5 py-1 text-white bg-gray-300 rounded">
                         Incomplet
                     </button>
                 }
             </div>
             <div>
                 <hr className="border-dashed"/>
-                <Link to="/login">
-                    <span>Déjà inscrit ? (Connectez-vous)</span>
-                </Link>
+                <div className="flex flex-row justify-between">
+                    <Link to="/login">
+                        <span>Déjà inscrit ? (Connectez-vous)</span>
+                    </Link>
+                    <Link to="/">
+                        <span>Retourner à l'accueil</span>
+                    </Link>
+                </div>
             </div>
         </form>
     </main>
