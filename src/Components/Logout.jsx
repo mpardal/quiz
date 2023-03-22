@@ -1,5 +1,6 @@
 import {useAuth} from "../Context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
 const Logout = () => {
 
@@ -9,6 +10,9 @@ const Logout = () => {
 
     const handleClick = () => {
         logOut()
+            .then(
+                navigate('/')
+            )
     }
 
     return (

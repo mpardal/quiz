@@ -1,6 +1,7 @@
 import club from '../assets/club.png'
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../Context/AuthContext.jsx";
+import {useEffect} from "react";
 
 const SignUp = () => {
 
@@ -28,6 +29,12 @@ const SignUp = () => {
 
         form.reset()
     }
+
+    useEffect(() => {
+        if (userSession) {
+            navigate('/')
+        }
+    }, [])
 
 
     return (

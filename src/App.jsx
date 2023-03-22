@@ -1,7 +1,6 @@
 import Header from "./Components/Header.jsx";
 import Landing from "./Components/Landing.jsx";
 import Footer from "./Components/Footer.jsx";
-import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SignUp from "./Components/SignUp.jsx";
 import Login from "./Components/Login.jsx";

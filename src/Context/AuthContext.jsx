@@ -73,21 +73,6 @@ export function AuthProvider({children}) {
         })
     }, [])
 
-    const logOut = () => {
-        if (userSession) {
-            signOut(auth)
-                .then(() => {
-                    setUserSession(false)
-                    console.log('Vous êtes déconnectés')
-                })
-                .catch(error => {
-                    const errorCode = error.code
-                    const errorMessage = error.message
-                    console.log(`${errorCode} => ${errorMessage}`)
-                })
-        }
-    }
-
     const signIn = async (email, password) => {
         await signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
@@ -101,6 +86,18 @@ export function AuthProvider({children}) {
 
     }
 
+    const logOut = async () => {
+        await signOut(auth)
+            .then(() => {
+                setUserSession(false)
+                console.log('Vous êtes déconnectés')
+            })
+            .catch(error => {
+                const errorCode = error.code
+                const errorMessage = error.message
+                console.log(`${errorCode} => ${errorMessage}`)
+            })
+    }
 
     const setInfoUser = async () => {
         if (userSession === true) {

@@ -1,7 +1,8 @@
 import Logout from "./Logout.jsx";
 import ballon from "../assets/ballon.png"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../Context/AuthContext.jsx";
+import {useEffect} from "react";
 
 const Header = () => {
     const {userSession} = useAuth()

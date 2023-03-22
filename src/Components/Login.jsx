@@ -1,6 +1,7 @@
 import stadium from "../assets/stadium.png";
 import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../Context/AuthContext.jsx";
+import {useEffect} from "react";
 
 
 const Login = () => {
@@ -26,6 +27,12 @@ const Login = () => {
 
         form.reset()
     }
+
+    useEffect(() => {
+        if (userSession) {
+            navigate('/')
+        }
+    }, [])
 
     return (
         <main className="flex flex-row justify-between h-full bg-gray-400">

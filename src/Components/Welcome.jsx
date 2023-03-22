@@ -6,9 +6,17 @@ import Levels from "./Levels.jsx";
 import {useEffect} from "react";
 
 const Welcome = () => {
-    const {userData} = useAuth()
+    const {userData, userSession} = useAuth()
+
+    const navigate = useNavigate()
 
     const {pseudo} = userData
+
+    useEffect(() => {
+        if (!userSession) {
+            navigate('/connexion')
+        }
+    }, [])
 
     return (
         <>
