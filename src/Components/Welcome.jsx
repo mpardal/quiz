@@ -1,8 +1,22 @@
+import {useAuth} from "../Context/AuthContext.jsx";
+import Quiz from "./Quiz.jsx";
+import {useNavigate} from "react-router-dom";
+import ProgressBar from "./ProgressBar.jsx";
+import Levels from "./Levels.jsx";
+import {useEffect} from "react";
+
 const Welcome = () => {
-    return(
-        <div>
-            Welcome
-        </div>
+    const {userData} = useAuth()
+
+    const {pseudo} = userData
+
+    return (
+        <>
+            <p>Pseudo : {pseudo}</p>
+            <Levels/> <br/>
+            <ProgressBar/>
+            <Quiz/>
+        </>
     )
 }
 

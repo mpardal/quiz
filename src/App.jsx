@@ -8,25 +8,31 @@ import Login from "./Components/Login.jsx";
 import Welcome from "./Components/Welcome.jsx";
 import ErrorPage from "./Components/ErrorPage.jsx";
 import ForgetPassword from "./Components/ForgetPassword.jsx";
+import Quiz from "./Components/Quiz.jsx";
+import {AuthProvider} from "./Context/AuthContext.jsx";
 
 function App() {
 
-  return (
-    <BrowserRouter>
-        <div className="m-0 h-screen">
-            <Header />
-            <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/inscription" element={<SignUp />} />
-                <Route path="/connexion" element={<Login />} />
-                <Route path="/accueil" element={<Welcome />} />
-                <Route path="/error" element={<ErrorPage />} />
-                <Route path="/mot-de-passe-oublie" element={<ForgetPassword />} />
-            </Routes>
-            <Footer />
-        </div>
-    </BrowserRouter>
-  )
+    return (
+        <BrowserRouter>
+            <div className="m-0 h-screen">
+                <AuthProvider>
+                    <Header/>
+                    <Routes>
+                        <Route path="/" element={<Landing/>}/>
+                        <Route path="/inscription" element={<SignUp/>}/>
+                        <Route path="/connexion" element={<Login/>}/>
+                        <Route path="/accueil" element={<Welcome/>}/>
+                        <Route path="/quiz" element={<Quiz/>}/>
+                        <Route path="/error" element={<ErrorPage/>}/>
+                        <Route path="/mot-de-passe-oublie" element={<ForgetPassword/>}/>
+                    </Routes>
+                    <Footer/>
+                </AuthProvider>
+
+            </div>
+        </BrowserRouter>
+    )
 }
 
 export default App

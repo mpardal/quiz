@@ -1,7 +1,7 @@
 const Quiz = () => {
   return(
       <>
-          Quiz
+          <h2>Quizz</h2>
       </>
   )
 }
