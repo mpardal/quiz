@@ -43,9 +43,9 @@ const Login = () => {
                 <h2 className="text-3xl">CONNEXION</h2>
                 <div className="flex flex-col mx-auto gap-10 w-full">
                     <input type="email" placeholder="Email" id="email" name="email"
-                           className={InputStyle}/>
+                           className={InputStyle} required/>
                     <input type="password" placeholder="Mot de passe" id="password" name="password"
-                           className={InputStyle}/>
+                           className={InputStyle} required/>
                     <button type="submit"
                             className="mx-auto px-5 py-1 text-white bg-green-600 rounded">
                         Connexion
