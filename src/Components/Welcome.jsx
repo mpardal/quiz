@@ -6,22 +6,26 @@ import Levels from "./Levels.jsx";
 import {useEffect} from "react";
 
 const Welcome = () => {
-    const {userData, userSession} = useAuth()
+    const {userData, userSession, setInfoUser} = useAuth()
 
     const navigate = useNavigate()
 
     const {pseudo} = userData
 
+    /*    useEffect(() => {
+            if (userSession === false) {
+                navigate('/connexion')
+            }
+        }, [])*/
+
     useEffect(() => {
-        if (!userSession) {
-            navigate('/connexion')
-        }
+        setInfoUser()
     }, [])
 
     return (
         <>
             <p>Pseudo : {pseudo}</p>
-            <Levels/> <br/>
+            <Levels/>
             <ProgressBar/>
             <Quiz/>
         </>

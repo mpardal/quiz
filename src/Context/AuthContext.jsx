@@ -46,7 +46,6 @@ export function AuthProvider({children}) {
     const [userSession, setUserSession] = useState(false)
     const [userData, setUserData] = useState({})
 
-    console.log(userSession)
     const signUp = async (email, password, pseudo) => {
         await createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
@@ -100,13 +99,11 @@ export function AuthProvider({children}) {
     }
 
     const setInfoUser = async () => {
-        if (userSession === true) {
-            const userCollection = query(collection(db, 'user'))
-            const querySnapshot = await getDocs(userCollection)
-            querySnapshot.forEach(doc => {
-                setUserData(doc.data())
-            })
-        }
+        const userCollection = query(collection(db, 'users'))
+        const querySnapshot = await getDocs(userCollection)
+        querySnapshot.forEach(doc => {
+            setUserData(doc.data())
+        })
     }
 
     const value = {
@@ -114,7 +111,8 @@ export function AuthProvider({children}) {
         signUp,
         signIn,
         logOut,
-        userSession
+        userSession,
+        setInfoUser
     }
 
     return (
