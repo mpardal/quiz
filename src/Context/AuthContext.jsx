@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useContext, useEffect, useRef, useState} from "react";
 import {createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut} from "firebase/auth";
 import {auth, db} from "../config/firebase-config.js";
 import {getDocs, collection, query, setDoc, addDoc, doc} from "firebase/firestore"
@@ -112,7 +112,7 @@ export function AuthProvider({children}) {
         signIn,
         logOut,
         userSession,
-        setInfoUser
+        setInfoUser,
     }
 
     return (
