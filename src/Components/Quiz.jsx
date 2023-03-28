@@ -1,15 +1,12 @@
 import { QuestionsQuiz } from './QuestionsQuiz.js'
 import { useEffect, useState } from 'react'
 
-const Quiz = ({ question, options }) => {
+const Quiz = ({ question, displayOptions }) => {
   return (
-    <>
-      <h2>{question}</h2>
-      <p>{options[0]}</p>
-      <p>{options[1]}</p>
-      <p>{options[2]}</p>
-      <p>{options[3]}</p>
-    </>
+    <div className="flex flex-col gap-2 items-start text-xl mt-6 ml-8">
+      <h2 className="text-2xl w-1/3 text-left">{question}</h2>
+      {displayOptions}
+    </div>
   )
 }
 

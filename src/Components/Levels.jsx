@@ -16,7 +16,9 @@ const Levels = ({ level }) => {
 
   return (
     <div>
-      <h2>{levelName}</h2>
+      <h2 className="ml-5">
+        Niveau : <span className="font-bold">{levelName}</span>
+      </h2>
     </div>
   )
 }
