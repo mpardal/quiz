@@ -1,3 +1,9 @@
+/**
+ * @param {number} idQuestions
+ * @param {number} maxQuestions
+ * @return {JSX.Element}
+ * @constructor
+ */
 const ProgressBar = ({ idQuestions, maxQuestions }) => {
   const getWidth = (totalQuestions, questionId) => {
     return (100 / totalQuestions) * questionId

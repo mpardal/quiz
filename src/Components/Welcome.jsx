@@ -17,33 +17,36 @@ const answerLoaded = (level) => {
   return fetchedQuestions.map(({ answer }) => answer)
 }
 
-const Welcome = () => {
-  const { userData, setInfoUser } = useAuth()
-  const { pseudo } = userData
+const maxQuestions = 10
+const levelNames = ['debutant', 'confirme', 'expert']
 
-  const levelNames = ['debutant', 'confirme', 'expert']
+const Welcome = () => {
+  const {
+    userData: { pseudo },
+    setInfoUser,
+  } = useAuth()
+
   const [quizLevel, setQuizLevel] = useState(0)
   const [storedQuestions, setStoredQuestions] = useState([])
   const [storedAnswer, setStoredAnswer] = useState([])
-  const [idQuestions, setIdQuestions] = useState(0)
+  const [idQuestion, setIdQuestion] = useState(0)
   const [score, setScore] = useState(0)
   const [userAnswer, setUserAnswer] = useState(null)
-  const [disabledButton, setDisabledButton] = useState(true)
-  const [quizEnd, setQuizEnd] = useState(false)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+  const [isQuizEnded, setIsQuizEnded] = useState(false)
   const [storedUserAnswer, setStoredUserAnswer] = useState([])
-  const maxQuestions = 10
 
   const level = levelNames[quizLevel]
-  const question = storedQuestions[idQuestions]?.question
-  const options = storedQuestions[idQuestions]?.options
-  const goodAnswer = storedAnswer[idQuestions]
+  const question = storedQuestions[idQuestion]?.question
+  const options = storedQuestions[idQuestion]?.options
+  const goodAnswer = storedAnswer[idQuestion]
 
-  const displayOptions = options?.map((option, index) => {
+  const displayedOptions = options?.map((option, index) => {
     return (
       <button
         type="button"
         key={index}
-        onClick={() => handleClickAnswers(option)}
+        onClick={() => handleClickUserAnswer(option)}
         className={`hover:bg-gray-300 p-2 rounded w-1/3 text-left ${
           userAnswer === option ? 'bg-gray-300' : null
         }`}
@@ -53,17 +56,17 @@ const Welcome = () => {
     )
   })
 
-  const handleClickAnswers = (selectedAnswer) => {
+  const handleClickUserAnswer = (selectedAnswer) => {
     setUserAnswer(selectedAnswer)
-    setDisabledButton(false)
+    setIsButtonDisabled(false)
   }
 
   const nextQuestions = () => {
-    if (idQuestions === maxQuestions - 1) {
-      setQuizEnd(true)
+    if (idQuestion === maxQuestions - 1) {
+      setIsQuizEnded(true)
       setStoredUserAnswer([...storedUserAnswer, userAnswer])
     } else {
-      setIdQuestions((idQuestions) => idQuestions + 1)
+      setIdQuestion((idQuestions) => idQuestions + 1)
       setStoredUserAnswer([...storedUserAnswer, userAnswer])
     }
 
@@ -75,10 +78,10 @@ const Welcome = () => {
     }
   }
 
-  const addLevel = () => {
+  const onClickLevelUp = () => {
     setQuizLevel((quizLevel) => quizLevel + 1)
-    setIdQuestions(0)
-    setQuizEnd(false)
+    setIdQuestion(0)
+    setIsQuizEnded(false)
     setUserAnswer(null)
   }
 
@@ -94,14 +97,7 @@ const Welcome = () => {
     setStoredAnswer(answersLoaded)
   }, [quizLevel])
 
-  return quizEnd ? (
-    <main>
-      <QuizOver score={score} userAnswers={storedUserAnswer} goodAnswers={storedAnswer} />
-      <button type="button" onClick={addLevel} className="p-2 bg-green-500 rounded my-5">
-        Niveau suivant
-      </button>
-    </main>
-  ) : (
+  return (
     <main className="text-center">
       <div className="flex flex-row justify-between mt-2 mx-5">
         <p>
@@ -111,19 +107,29 @@ const Welcome = () => {
           Score : <span className="font-bold">{score}</span>
         </p>
       </div>
-      <Levels level={level} />
-      <ProgressBar idQuestions={idQuestions} maxQuestions={maxQuestions} />
-      <Quiz question={question} displayOptions={displayOptions} />
-      <button
-        type="button"
-        onClick={nextQuestions}
-        disabled={disabledButton}
-        className="p-2 bg-green-500 rounded my-5"
-      >
-        Valider
-      </button>
+      {isQuizEnded ? (
+        <>
+          <QuizOver score={score} userAnswers={storedUserAnswer} goodAnswers={storedAnswer} />
+          <button type="button" onClick={onClickLevelUp} className="p-2 bg-green-500 rounded my-5">
+            Niveau suivant
+          </button>
+        </>
+      ) : (
+        <>
+          <Levels level={level} />
+          <ProgressBar idQuestions={idQuestion} maxQuestions={maxQuestions} />
+          <Quiz question={question} displayOptions={displayedOptions} />
+          <button
+            type="button"
+            onClick={nextQuestions}
+            disabled={isButtonDisabled}
+            className="p-2 bg-green-500 rounded my-5"
+          >
+            Valider
+          </button>
+        </>
+      )}
     </main>
   )
 }
-
 export default Welcome
