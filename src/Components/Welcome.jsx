@@ -105,9 +105,9 @@ const Welcome = () => {
   }, [quizLevel])
 
   return (
-    <main className="text-center">
+    <main className="text-center h-full flex flex-col justify-center gap-10">
       <div className="flex flex-row justify-between mt-2 mx-5">
-        <p>
+        <p className="ml-10 xl:ml-0">
           Pseudo : <span className="font-bold">{pseudo}</span>
         </p>
         <p className="text-2xl bg-gray-200 p-3 rounded">
@@ -120,7 +120,7 @@ const Welcome = () => {
           <button
             type="button"
             onClick={quizLevel === levelNames.length - 1 ? onClickFinish : onClickLevelUp}
-            className="p-2 bg-green-500 rounded my-5"
+            className="p-2 bg-green-500 rounded my-5 w-1/4 xl:w-1/6 mx-auto"
           >
             {quizLevel === levelNames.length - 1 ? 'Redémarrer le quiz' : 'Niveau suivant'}
           </button>
@@ -134,7 +134,7 @@ const Welcome = () => {
             type="button"
             onClick={nextQuestions}
             disabled={isButtonDisabled}
-            className="p-2 bg-green-500 rounded my-5"
+            className="p-2 bg-green-500 rounded my-5 w-1/4 xl:w-1/6 mx-auto"
           >
             Valider
           </button>

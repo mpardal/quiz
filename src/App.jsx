@@ -23,7 +23,6 @@ function App() {
               <Route path="/inscription" element={<SignUp />} />
               <Route path="/connexion" element={<Login />} />
               <Route path="/accueil" element={<Welcome />} />
-              <Route path="/error" element={<ErrorPage />} />
               <Route path="/mot-de-passe-oublie" element={<ForgetPassword />} />
             </Routes>
             <Footer />

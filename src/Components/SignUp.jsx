@@ -40,12 +40,12 @@ const SignUp = () => {
   }, [])
 
   return (
-    <main className="flex flex-row justify-between h-full bg-gray-400">
+    <main className="flex flex-col xl:flex-row items-center xl:justify-between justify-between h-full bg-gray-400">
       <div className="my-auto">
         <img src={club} alt="inscription" />
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col m-auto gap-20 w-1/2">
-        <h2 className="text-3xl">INSCRIPTION</h2>
+        <h2 className="text-3xl text-center xl:text-left">INSCRIPTION</h2>
         <div className="flex flex-col mx-auto gap-10 w-full">
           <input
             type="text"
@@ -85,7 +85,7 @@ const SignUp = () => {
         </div>
         <div>
           <hr className="border-dashed" />
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-3 xl:gap-0">
             <Link to="/login">
               <span>Déjà inscrit ? (Connectez-vous)</span>
             </Link>
