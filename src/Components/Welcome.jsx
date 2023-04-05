@@ -21,7 +21,7 @@ const maxQuestions = 10
 const levelNames = ['debutant', 'confirme', 'expert']
 
 const Welcome = () => {
-  const {
+  let {
     userData: { pseudo },
     setInfoUser,
   } = useAuth()
@@ -30,7 +30,7 @@ const Welcome = () => {
   const [storedQuestions, setStoredQuestions] = useState([])
   const [storedAnswer, setStoredAnswer] = useState([])
   const [idQuestion, setIdQuestion] = useState(0)
-  const [score, setScore] = useState(0)
+  const [scoreUser, setScoreUser] = useState(0)
   const [userAnswer, setUserAnswer] = useState(null)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const [isQuizEnded, setIsQuizEnded] = useState(false)
@@ -64,35 +64,42 @@ const Welcome = () => {
   const nextQuestions = () => {
     if (idQuestion === maxQuestions - 1) {
       setIsQuizEnded(true)
-      setStoredUserAnswer([...storedUserAnswer, userAnswer])
     } else {
       setIdQuestion((idQuestions) => idQuestions + 1)
-      setStoredUserAnswer([...storedUserAnswer, userAnswer])
     }
 
     if (userAnswer === goodAnswer) {
-      setScore((score) => score + 1)
+      setScoreUser((score) => score + 1)
       toast.success('Bravo +1 point')
-    } else {
-      toast.error('Désolé, vous vous êtes trompés')
-    }
+    } else toast.error('Désolé, vous vous êtes trompés')
+
+    setStoredUserAnswer([...storedUserAnswer, userAnswer])
+    setIsButtonDisabled(true)
   }
 
   const onClickLevelUp = () => {
     setQuizLevel((quizLevel) => quizLevel + 1)
     setIdQuestion(0)
     setIsQuizEnded(false)
-    setUserAnswer(null)
+    setStoredUserAnswer([])
+  }
+
+  const onClickFinish = () => {
+    setIdQuestion(0)
+    setQuizLevel(0)
+    setIsQuizEnded(false)
+    setStoredUserAnswer([])
+    setScoreUser(0)
   }
 
   useEffect(() => {
     setInfoUser()
+    console.log(`${quizLevel} => ${levelNames.length - 1}`)
   }, [])
 
   useEffect(() => {
     const questionsLoaded = loadQuestions(level)
     setStoredQuestions(questionsLoaded)
-
     const answersLoaded = answerLoaded(level)
     setStoredAnswer(answersLoaded)
   }, [quizLevel])
@@ -104,14 +111,18 @@ const Welcome = () => {
           Pseudo : <span className="font-bold">{pseudo}</span>
         </p>
         <p className="text-2xl bg-gray-200 p-3 rounded">
-          Score : <span className="font-bold">{score}</span>
+          Score : <span className="font-bold">{scoreUser}</span>
         </p>
       </div>
       {isQuizEnded ? (
         <>
-          <QuizOver score={score} userAnswers={storedUserAnswer} goodAnswers={storedAnswer} />
-          <button type="button" onClick={onClickLevelUp} className="p-2 bg-green-500 rounded my-5">
-            Niveau suivant
+          <QuizOver score={scoreUser} userAnswers={storedUserAnswer} goodAnswers={storedAnswer} />
+          <button
+            type="button"
+            onClick={quizLevel === levelNames.length - 1 ? onClickFinish : onClickLevelUp}
+            className="p-2 bg-green-500 rounded my-5"
+          >
+            {quizLevel === levelNames.length - 1 ? 'Redémarrer le quiz' : 'Niveau suivant'}
           </button>
         </>
       ) : (

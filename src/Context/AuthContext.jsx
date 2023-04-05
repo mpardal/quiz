@@ -1,7 +1,12 @@
-import {createContext, useContext, useEffect, useRef, useState} from "react";
-import {createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import {auth, db} from "../config/firebase-config.js";
-import {getDocs, collection, query, setDoc, addDoc, doc} from "firebase/firestore"
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth'
+import { auth, db } from '../config/firebase-config.js'
+import { getDocs, collection, query, updateDoc, addDoc, doc } from 'firebase/firestore'
 
 const AuthContext = createContext(/** @type {AuthContextValue} */ {})
 
@@ -20,9 +25,8 @@ const AuthContext = createContext(/** @type {AuthContextValue} */ {})
  * @return {AuthContextValue}
  */
 export function useAuth() {
-    return useContext(AuthContext)
+  return useContext(AuthContext)
 }
-
 
 // 1. Le AuthProvider ne devrait pas gérer le formulaire de login (loginData, etc)
 // 2. Il ne devrait pas être responsable de la redirection (navigate)
@@ -37,89 +41,92 @@ export function useAuth() {
  *
  * Je verrai donc,
  *
- * ```jsx
+ * ``` jsx
  * <AuthContext.Provider value={{ signIn, logOut, signUp, userData }}>{children}</AuthContext.Provider>
  * ```
  */
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
+  const [userSession, setUserSession] = useState(false)
+  const [userData, setUserData] = useState({})
 
-    const [userSession, setUserSession] = useState(false)
-    const [userData, setUserData] = useState({})
+  const signUp = async (email, password, pseudo) => {
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        userCredential.user
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(`${errorCode} => ${errorMessage}`)
+      })
+    await addDoc(collection(db, 'users'), {
+      pseudo,
+      email,
+    })
+  }
 
-    const signUp = async (email, password, pseudo) => {
-        await createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                userCredential.user
-            })
-            .catch(error => {
-                const errorCode = error.code
-                const errorMessage = error.message
-                console.log(`${errorCode} => ${errorMessage}`)
-            })
-        await addDoc(collection(db, 'users'), {
-            pseudo,
-            email,
-        })
-    }
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserSession(true)
+      } else {
+        setUserSession(false)
+      }
+    })
+  }, [])
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserSession(true)
-            } else {
-                setUserSession(false)
-            }
-        })
-    }, [])
+  const signIn = async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        userCredential.user
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(`${errorCode} => ${errorMessage}`)
+      })
+  }
 
-    const signIn = async (email, password) => {
-        await signInWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                userCredential.user
-            })
-            .catch(error => {
-                const errorCode = error.code
-                const errorMessage = error.message
-                console.log(`${errorCode} => ${errorMessage}`)
-            })
+  const logOut = async () => {
+    await signOut(auth)
+      .then(() => {
+        setUserSession(false)
+        console.log('Vous êtes déconnectés')
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(`${errorCode} => ${errorMessage}`)
+      })
+  }
 
-    }
+  const setInfoUser = async () => {
+    const userCollection = query(collection(db, 'users'))
+    const querySnapshot = await getDocs(userCollection)
+    querySnapshot.forEach((doc) => {
+      setUserData(doc.data())
+    })
+  }
 
-    const logOut = async () => {
-        await signOut(auth)
-            .then(() => {
-                setUserSession(false)
-                console.log('Vous êtes déconnectés')
-            })
-            .catch(error => {
-                const errorCode = error.code
-                const errorMessage = error.message
-                console.log(`${errorCode} => ${errorMessage}`)
-            })
-    }
+  /*  const addInfoUser = async () => {
+      const userCollection = doc(db, 'users')
+      await addDoc(userCollection, {
+        score,
+      })
+    }*/
 
-    const setInfoUser = async () => {
-        const userCollection = query(collection(db, 'users'))
-        const querySnapshot = await getDocs(userCollection)
-        querySnapshot.forEach(doc => {
-            setUserData(doc.data())
-        })
-    }
+  const value = {
+    userData,
+    signUp,
+    signIn,
+    logOut,
+    userSession,
+    setInfoUser,
+  }
 
-    const value = {
-        userData,
-        signUp,
-        signIn,
-        logOut,
-        userSession,
-        setInfoUser,
-    }
-
-    return (
-        // comme ça ici, Phpstorm t'indique que value n'est pas au bon format,
-        // tant que c'est souligné, ça veut sûrement dire que tu n'envoies pas les bons trucs
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    )
+  return (
+    // comme ça ici, Phpstorm t'indique que value n'est pas au bon format,
+    // tant que c'est souligné, ça veut sûrement dire que tu n'envoies pas les bons trucs
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  )
 }
